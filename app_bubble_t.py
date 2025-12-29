@@ -20,7 +20,7 @@ def calculate_T0(P, A, B, C, P_unit_Ant, T_unit_Ant,x):
     return T0
 
 
-def calculate_Psat(T_1, T_unit_Ant, A, B, C, P_unit_Ant):
+def calculate_Psat(T_1, T_unit_Ant, A, B, C, P_unit_Ant): # Antoine constants
     Psat = []
     n = len(A)
 
@@ -56,12 +56,12 @@ def calculate_gamma(x, Lambda):
 
     for i in range(n):
 
-        # first sum: sum_j (xj * Lambda_ij)
+        # first sum
         sum1 = 0.0
         for j in range(n):
             sum1 += x[j] * Lambda[i][j]
 
-        # second term: sum_k [ xk * Lambda_ki / sum_j(xj * Lambda_kj) ]
+        # second term
         sum2 = 0.0
         for k in range(n):
             denom = 0.0
@@ -101,7 +101,7 @@ def calculate_phi(T_old, P, Bik, R, yi, T_unit):
     n = len(yi)
     phi = []
 
-    # Compute Sij = 2*Bik - Bii - Bkk
+    
     S = [[2 * Bik[i][j] - Bik[i][i] - Bik[j][j] for j in range(n)] for i in range(n)]
 
     for k in range(n):
@@ -177,7 +177,7 @@ def bubble_point_iteration(T0, P, x, A, B, C, T_unit_Ant, V, a, R,
 
         error = (abs(T_old - Tk_sat) / T_old) * 100
 
-        # ===== Streamlit Output =====
+
         st.text(f"\nIteration {iteration}")
         st.text(f"T_old = {T_old:.8f} {T_unit_Ant.upper()}")
         st.text(f"Tk_sat = {Tk_sat:.8f} {T_unit_Ant.upper()}")
@@ -268,7 +268,6 @@ x = [st.sidebar.number_input(f"x{i+1}", value=1/n, format="%.8f") for i in range
 
 tol = st.sidebar.number_input("Temperature tolerance (%)", value=0.01, format="%.8f")
 
-# ===================== Run =====================
 
 if st.button("Calculate Bubble Point"):
     T0 = calculate_T0(P, A, B, C, P_unit_Ant, T_unit_Ant, x)
